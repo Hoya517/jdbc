@@ -1,10 +1,12 @@
 package hello.jdbc.exception.basic;
 
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 
+@Slf4j
 public class UncheckedAppTest {
 
     @Test
@@ -12,6 +14,17 @@ public class UncheckedAppTest {
         Controller controller = new Controller();
         Assertions.assertThatThrownBy(() -> controller.request())
                 .isInstanceOf(Exception.class);
+    }
+
+    @Test
+    void printEx() {
+        Controller controller = new Controller();
+        try {
+            controller.request();
+        } catch (Exception e) {
+//            e.printStackTrace();
+            log.info("ex", e);
+        }
     }
 
     static class Controller {
@@ -43,6 +56,7 @@ public class UncheckedAppTest {
             try {
                 runSQL();
             } catch (SQLException e) {
+//                throw new RuntimeSQLException();    // SQLException 를 확인할 수 없는 심각한 문제가 발생
                 throw new RuntimeSQLException(e);
             }
         }
